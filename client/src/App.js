@@ -10,8 +10,9 @@ function App() {
 
   // All vote data objects
   const [votes, setVotes] = useState([]);
+  const [voteObj, setVoteObj] = useState([]);
 
-  // Current round
+  // Set round
   const [round, setRound] = useState(1);
 
   // Grab the input data (allows for multiple CSV files)
@@ -27,20 +28,15 @@ function App() {
     })
 
     setUploadedFiles(uploaded);
+
+    // Load votes when files have been processed
+    loadVotes();
   }
 
   const handleFileEvent = (e) => {
     const gatheredFiles = Array.prototype.slice.call(e.target.files);
     handleFiles(gatheredFiles);
     //console.log(uploadedFiles)
-  }
-
-  const startRound = () => {
-    // Load votes when files have been processed
-    loadVotes();
-
-    // Set round state to 1
-    setRound(1);
   }
 
   const loadVotes = () => {
@@ -78,7 +74,7 @@ function App() {
 
     // Convert the json to js objects
     const arrObjects = await convertToObj(voteJSON);
-    console.log(arrObjects)
+    setVoteObj(arrObjects)
   }
 
   return (
@@ -87,7 +83,7 @@ function App() {
         <div id="upload-container">
           <h1>Upload Multiple CSV files:</h1>
           <input type="file" name="file" accept=".csv" multiple onChange={handleFileEvent} />
-          <button multiple onClick={startRound}>Start</button>
+          <button multiple onClick={loadVotes}>Start</button>
         </div>
         <div>
           <h1>Loaded Files: </h1>
@@ -99,11 +95,22 @@ function App() {
         </div>
         <div>
           <h1>Votes: </h1>
-          {votes.map(vote => (
-            <div key={vote.VoterID}>
-              {vote.VoterID}
-            </div>
-          ))}
+          <table>
+          <tr>
+            <th>First Vote</th>
+            <th>Second Vote</th>
+            <th>Third Vote</th>
+            <th>Voter ID</th>
+          </tr>
+            {voteObj.map(vote => (
+              <tr>
+                <td>{vote.first}</td>
+                <td>{vote.second}</td>
+                <td>{vote.third}</td>
+                <td>{vote.voterID}</td>
+              </tr>
+            ))}
+          </table>
         </div>
       </div>
     </div>
