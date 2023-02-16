@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import Papa from 'papaparse'
 import convertToObj from './util/convertToObject';
+import removeDuplicates from './util/removeDuplicates';
 
 function App() {
 
@@ -12,8 +13,16 @@ function App() {
   const [votes, setVotes] = useState([]);
   const [voteObj, setVoteObj] = useState([]);
 
+  // Duplicates
+  const [duplicates, setDuplicates] = useState([]);
+
   // Set round
-  const [round, setRound] = useState(1);
+  const [round, setRound] = useState(0);
+
+  const startRound = () => {
+    // Move round state to round 1
+    setRound(1);
+  }
 
   // Grab the input data (allows for multiple CSV files)
   const handleFiles = files => {
@@ -54,10 +63,15 @@ function App() {
         })
     })
 
-    setVotes(newVotes);
+    // Remove duplicates and save new vote array of objs
+    //setVotes(removeDuplicates(newVotes));
+    setVotes(newVotes)
 
     // Convert the json res data to real objects
     convertObj();
+
+    // Start round after converting
+    startRound();
   }
 
   const convertObj = async () => {
@@ -74,7 +88,9 @@ function App() {
 
     // Convert the json to js objects
     const arrObjects = await convertToObj(voteJSON);
-    setVoteObj(arrObjects)
+    const obj = removeDuplicates(arrObjects);
+    setVoteObj(obj.arr)
+    setDuplicates(obj.dups)
   }
 
   return (
@@ -94,22 +110,32 @@ function App() {
           ))}
         </div>
         <div>
+          <h1>Duplicate ID: </h1>
+          {duplicates.map(dup => (
+            <ol key={`Duplicate-${dup}`}>
+              #{dup}
+            </ol>
+          ))}
+        </div>
+        <div>
           <h1>Votes: </h1>
           <table>
+          <tbody>
           <tr>
             <th>First Vote</th>
             <th>Second Vote</th>
             <th>Third Vote</th>
             <th>Voter ID</th>
           </tr>
+          </tbody>
             {voteObj.map(vote => (
-              <tr>
-                <td>{vote.first}</td>
-                <td>{vote.second}</td>
-                <td>{vote.third}</td>
-                <td>{vote.voterID}</td>
-              </tr>
-            ))}
+                <tr key={vote.voterID}>
+                  <td>{vote.first}</td>
+                  <td>{vote.second}</td>
+                  <td>{vote.third}</td>
+                  <td>{vote.voterID}</td>
+                </tr>
+              ))}
           </table>
         </div>
       </div>
