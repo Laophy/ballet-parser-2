@@ -4,15 +4,15 @@ import Papa from 'papaparse'
 import convertToObj from './util/convertToObject';
 import removeDuplicates from './util/removeDuplicates';
 import getUniqueNames from './util/getUniqueNames';
+import convertVote from './util/votes';
 
 function App() {
-
 	// Data states
 	const [uploadedFiles, setUploadedFiles] = useState([]);
 
 	// All vote data objects
-	const [votes, setVotes] = useState([]);
-	const [voteObj, setVoteObj] = useState([]);
+	const [ballet, setBallets] = useState([]);
+	const [newBallet, setNewBallet] = useState([]);
 
 	// Duplicates
 	const [duplicates, setDuplicates] = useState([]);
@@ -23,20 +23,20 @@ function App() {
 	// Set round
 	const [round, setRound] = useState(0);
 	
-
 	const startRound = () => {
 		// Move round state to round 1
 		setRound(1);
 
 		// Get unique names of voters
-		setCanidates(getUniqueNames(voteObj))
+		setCanidates(getUniqueNames(newBallet))
 
-		console.log(voteObj)
+		// Convert the ballets into vote objects {"first": VOTE, "id": ID}
+		console.log(convertVote(newBallet))
 	}
 
 	// Grab the input data (allows for multiple CSV files)
 	const handleFiles = files => {
-		// Reset old files first due to new votes
+		// Reset old files first due to new ballet
 		const uploaded = [...uploadedFiles]
 
 		files.some((file) => {
@@ -47,18 +47,14 @@ function App() {
 		})
 
 		setUploadedFiles(uploaded);
-
-		// Load votes when files have been processed
-		loadVotes();
 	}
 
 	const handleFileEvent = (e) => {
 		const gatheredFiles = Array.prototype.slice.call(e.target.files);
 		handleFiles(gatheredFiles);
-		//console.log(uploadedFiles)
 	}
 
-	const loadVotes = () => {
+	const loadVotes = async () => {
 		const newVotes = [];
 
 		uploadedFiles.forEach(file => {
@@ -74,18 +70,17 @@ function App() {
 		})
 
 		// Remove duplicates and save new vote array of objs
-		//setVotes(removeDuplicates(newVotes));
-		setVotes(newVotes)
+		setBallets(newVotes)
 
 		// Convert the json res data to real objects
-		convertObj();
+		await convertObj();
 
 		// Start round after converting
-		startRound();
+		await startRound();
 	}
 
 	const convertObj = async () => {
-		const voteCopy = [...votes]
+		const voteCopy = [...ballet]
 		const voteJSON = []
 
 		for (let arr of voteCopy) {
@@ -99,7 +94,7 @@ function App() {
 		// Convert the json to js objects
 		const arrObjects = await convertToObj(voteJSON);
 		const obj = removeDuplicates(arrObjects);
-		setVoteObj(obj.arr)
+		setNewBallet(obj.arr)
 		setDuplicates(obj.dups)
 	}
 
@@ -111,7 +106,7 @@ function App() {
 				<h1>Upload Multiple CSV files:</h1>
 				<input type="file" name="file" accept=".csv" multiple onChange={handleFileEvent} /><br />
 				<p>(You will need to spam click start a few times... It's a react useState issue i didn't have time to fix.)</p>
-				<button className="button-82-pushable" role="button" multiple onClick={loadVotes} style={{ margin: 15 }}>
+				<button className="button-82-pushable" multiple onClick={loadVotes} style={{ margin: 15 }}>
 					<span className="button-82-shadow"></span>
 					<span className="button-82-edge"></span>
 					<span className="button-82-front text">
@@ -154,7 +149,7 @@ function App() {
 							<th>Voter ID</th>
 						</tr>
 					</tbody>
-					{voteObj.map(vote => (
+					{newBallet.map(vote => (
 						<tr key={vote.getVote()}>
 							<td>{vote.getFirst()}</td>
 							<td>{vote.getSecond()}</td>
