@@ -30,6 +30,8 @@ function App() {
 
 		// Get unique names of voters
 		setCanidates(getUniqueNames(voteObj))
+
+		console.log(voteObj)
 	}
 
 	// Grab the input data (allows for multiple CSV files)
