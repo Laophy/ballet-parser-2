@@ -5,5 +5,26 @@ export function Vote(first, second, third, voterid) {
     this.third = third;
     this.voterID = parseInt(voterid);
 
+
+    // Get first option
+    this.getFirst = () => {
+        return this.first;
+    }
+
+    // Get second option
+    this.getSecond = () => {
+        return this.second;
+    }
+
+    // Get third option
+    this.getThird = () => {
+        return this.third;
+    }
+
+    // Get vote
+    this.getVote = () => {
+        return this.voterID;
+    }
+
     return this;
 }

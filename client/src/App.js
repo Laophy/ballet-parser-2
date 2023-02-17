@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Papa from 'papaparse'
 import convertToObj from './util/convertToObject';
 import removeDuplicates from './util/removeDuplicates';
+import getUniqueNames from './util/getUniqueNames';
 
 function App() {
 
@@ -16,12 +17,19 @@ function App() {
 	// Duplicates
 	const [duplicates, setDuplicates] = useState([]);
 
+	// Unique canidates
+	const [canidates, setCanidates] = useState([]);
+
 	// Set round
 	const [round, setRound] = useState(0);
+	
 
 	const startRound = () => {
 		// Move round state to round 1
 		setRound(1);
+
+		// Get unique names of voters
+		setCanidates(getUniqueNames(voteObj))
 	}
 
 	// Grab the input data (allows for multiple CSV files)
@@ -95,49 +103,64 @@ function App() {
 
 	return (
 		<div className="App">
-			<div className='app'>
-				<div id="upload-container">
-					<h1>Upload Multiple CSV files:</h1>
-					<input type="file" name="file" accept=".csv" multiple onChange={handleFileEvent} />
-					<button multiple onClick={loadVotes}>Start</button>
-				</div>
-				<div>
-					<h1>Loaded Files: </h1>
-					{uploadedFiles.map(file => (
-						<ol key={file.name}>
-							{file.name}
-						</ol>
+			<h1 style={{ textAlign: 'center', fontSize: 32 }}>PreAssessment Ranked Ballots</h1>
+			<hr></hr>
+			<div id="upload-container">
+				<h1>Upload Multiple CSV files:</h1>
+				<input type="file" name="file" accept=".csv" multiple onChange={handleFileEvent} /><br />
+				<p>(You will need to spam click start a few times... It's a react useState issue i didn't have time to fix.)</p>
+				<button className="button-82-pushable" role="button" multiple onClick={loadVotes} style={{ margin: 15 }}>
+					<span className="button-82-shadow"></span>
+					<span className="button-82-edge"></span>
+					<span className="button-82-front text">
+						Start
+					</span>
+				</button>
+			</div>
+			<div>
+				<h1>Loaded Files: </h1>
+				{uploadedFiles.map(file => (
+					<ol key={file.name}>
+						{file.name}
+					</ol>
+				))}
+			</div>
+			<div>
+				<h1>Duplicate ID: </h1>
+				{duplicates.map(dup => (
+					<ol key={`Duplicate-${dup}`}>
+						#{dup}
+					</ol>
+				))}
+			</div>
+			<div>
+				<h1>Uniuqe Votes: </h1>
+				{canidates.map(canidate => (
+					<ol key={canidate}>
+						{canidate}
+					</ol>
+				))}
+			</div>
+			<div>
+				<h1>Vote Objects: </h1>
+				<table>
+					<tbody>
+						<tr>
+							<th>First Vote</th>
+							<th>Second Vote</th>
+							<th>Third Vote</th>
+							<th>Voter ID</th>
+						</tr>
+					</tbody>
+					{voteObj.map(vote => (
+						<tr key={vote.getVote()}>
+							<td>{vote.getFirst()}</td>
+							<td>{vote.getSecond()}</td>
+							<td>{vote.getThird()}</td>
+							<td>{vote.getVote()}</td>
+						</tr>
 					))}
-				</div>
-				<div>
-					<h1>Duplicate ID: </h1>
-					{duplicates.map(dup => (
-						<ol key={`Duplicate-${dup}`}>
-							#{dup}
-						</ol>
-					))}
-				</div>
-				<div>
-					<h1>Vote Objects: </h1>
-					<table>
-						<tbody>
-							<tr>
-								<th>First Vote</th>
-								<th>Second Vote</th>
-								<th>Third Vote</th>
-								<th>Voter ID</th>
-							</tr>
-						</tbody>
-						{voteObj.map(vote => (
-							<tr key={vote.voterID}>
-								<td>{vote.first}</td>
-								<td>{vote.second}</td>
-								<td>{vote.third}</td>
-								<td>{vote.voterID}</td>
-							</tr>
-						))}
-					</table>
-				</div>
+				</table>
 			</div>
 		</div>
 	);
