@@ -9,6 +9,10 @@ Open [https://nodejs.org/en/download/](https://nodejs.org/en/download/) to downl
 
 I highly recommend using Visual Studio Code when attempting to modify or use this application.\
 
+### Git Clone this Repo!
+
+Clone this repo [https://github.com/Laophy/ballet-parser-2.git](https://github.com/Laophy/ballet-parser-2.git) to your local pc.\
+
 ## Available Scripts
 
 In the project directory, you should run the following terminal commands starting from the root:
