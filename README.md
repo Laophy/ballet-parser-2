@@ -11,7 +11,7 @@ I highly recommend using Visual Studio Code when attempting to modify or use thi
 
 ## Available Scripts
 
-In the project directory, you should run:
+In the project directory, you should run the following terminal commands starting from the root:
 
 ### `cd client`
 
