@@ -32,9 +32,9 @@ export default function processVoteData(votes, canidates, round){
     
 
     // Debug our winner
-    console.log(totals, 'canidate totals');
-    console.log(elemed, 'removed canidates');
-    //console.log(winner, 'winner');
+    console.log(totals);
+    console.log(elemed);
+    console.log(winner, 'winner');
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -74,8 +74,8 @@ export default function processVoteData(votes, canidates, round){
         
     
         // Debug our winner
-        console.log(totals, 'canidate totals');
-        console.log(elemed, 'removed canidates');
+        console.log(totals);
+        console.log(elemed);
         console.log(winner, 'winner');
     }
 }
