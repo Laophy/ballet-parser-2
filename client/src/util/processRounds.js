@@ -33,7 +33,9 @@ export default function processVoteData(votes, canidates, round){
 
     // Debug our winner
     console.log(totals);
+    alert("Voting totals " + JSON.stringify(totals))
     console.log(elemed);
+    alert("Eliminated " + elemed)
     console.log(winner, 'winner');
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,10 +74,15 @@ export default function processVoteData(votes, canidates, round){
         elemed = res.elemed;
         winner = res.winner;
         
+        if(!inProgress){
+           return {totals, elemed, winner, inProgress};
+        }
     
         // Debug our winner
         console.log(totals);
+        alert("Voting totals " + JSON.stringify(totals))
         console.log(elemed);
+        alert("Eliminated " + elemed)
         console.log(winner, 'winner');
     }
 }

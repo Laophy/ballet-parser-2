@@ -36,7 +36,12 @@ export default function App() {
     setVotes(convertVote(newBallet));
 
     // Start the round process when votes are cleaned
-    processVoteData(convertVote(newBallet), canidates, 'first');
+    const results = processVoteData(convertVote(newBallet), canidates, 'first');
+
+	 // Debug our winner
+	 console.log(results.totals);
+	 console.log(results.elemed);
+	 console.log(results.winner, 'winner');
   };
 
   // Grab the input data (allows for multiple CSV files)
@@ -209,6 +214,12 @@ export default function App() {
           </tbody>
         </table>
       </div>
+	  <div>
+		<h1>Results</h1>
+		<div className="results">
+
+		</div>
+	  </div>
     </div>
   );
 }
