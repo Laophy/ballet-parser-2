@@ -5,6 +5,7 @@ import convertToObj from "./util/convertToObject";
 import removeDuplicates from "./util/removeDuplicates";
 import getUniqueNames from "./util/getUniqueNames";
 import convertVote from "./util/votes";
+import processVoteData from "./util/processRounds";
 
 function App() {
   // Data states
@@ -24,7 +25,7 @@ function App() {
   // Set round
   const [round, setRound] = useState(0);
 
-  const startRound = () => {
+  const startRound = async () => {
     // Move round state to round 1
     setRound(1);
 
@@ -33,7 +34,9 @@ function App() {
 
     // Convert the ballets into vote objects {"first": VOTE, "id": ID}
     setVotes(convertVote(newBallet));
-    console.log(convertVote(newBallet));
+
+    // Start the round process when votes are cleaned
+    processVoteData(convertVote(newBallet), canidates, 'first');
   };
 
   // Grab the input data (allows for multiple CSV files)
@@ -115,10 +118,10 @@ function App() {
           onChange={handleFileEvent}
         />
         <br />
-        <p>
-          (You will need to spam click start a few times... It's a react
-          useState issue i didn't have time to fix.)
-        </p>
+        <h3 style={{textAlign: 'center'}}>
+          (It may take around 3-4 button clicks to load all the data due to a
+          state issue i did not have the time to fix.)
+        </h3>
         <button
           className="button-82-pushable"
           multiple
@@ -136,22 +139,22 @@ function App() {
           <thead>
             <tr>
               <th>ID</th>
-			  <th>Size</th>
-			  <th>Last Modified</th>
+              <th>Size</th>
+              <th>Last Modified</th>
             </tr>
           </thead>
           <tbody>
             {uploadedFiles.map((file) => (
               <tr>
                 <td key={file.name}>{file.name}</td>
-				<td>{file.size}</td>
-				<td>{file.lastModifiedDate.toString()}</td>
+                <td>{file.size}</td>
+                <td>{file.lastModifiedDate.toString()}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-	  <br></br>
+      <br></br>
       <div>
         <table style={{ width: 350 }}>
           <thead>
@@ -168,7 +171,7 @@ function App() {
           </tbody>
         </table>
       </div>
-	  <br></br>
+      <br></br>
       <div>
         <table style={{ width: 350 }}>
           <thead>
