@@ -34,3 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
+
+### Current bug
+
+I didn't have time to implement multiple components so I used one which messes with my states and I didn't have time to finish it so you will need to hit the start button a few times. (4)

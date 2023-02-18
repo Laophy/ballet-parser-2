@@ -124,7 +124,7 @@ export default function App() {
         />
         <br />
         <h3 style={{textAlign: 'center'}}>
-          (It may take around 3-4 button clicks to load all the data due to a
+          (It may take 4 button clicks to load all the data due to a
           state issue i did not have the time to fix.)
         </h3>
         <button
